@@ -84,8 +84,8 @@ function printItems(array $items): void {
 // Основной цикл программы
 do {
     // Очистка экрана (в данном случае комментирована для UNIX, а для Windows используется 'cls')
-    system('clear');
-    // system('cls'); // для Windows
+    // system('clear');
+    system('cls'); // для Windows
 
     // Отображение списка покупок
     displayItems($items);
