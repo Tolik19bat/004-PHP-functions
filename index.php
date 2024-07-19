@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Определение констант для операций
 const OPERATION_EXIT = 0;
@@ -18,24 +19,24 @@ $operations = [
 $items = [];
 
 // Функция для отображения списка покупок
-function displayItems($items) {
+function displayItems(array $items): void {
     if (count($items)) {
         echo 'Ваш список покупок: ' . PHP_EOL;
-        echo implode("\n", $items) . "\n";
+        echo implode(PHP_EOL, $items) . PHP_EOL;
     } else {
         echo 'Ваш список покупок пуст.' . PHP_EOL;
     }
 }
 
 // Функция для запроса операции у пользователя
-function getOperation($operations) {
+function getOperation(array $operations): int {
     do {
         // Вывод доступных операций
         echo 'Выберите операцию для выполнения: ' . PHP_EOL;
         echo implode(PHP_EOL, $operations) . PHP_EOL . '> ';
 
         // Чтение номера операции от пользователя
-        $operationNumber = trim(fgets(STDIN));
+        $operationNumber = (int)trim(fgets(STDIN));
 
         // Проверка на корректность выбранной операции
         if (!array_key_exists($operationNumber, $operations)) {
@@ -48,14 +49,16 @@ function getOperation($operations) {
 }
 
 // Функция для добавления товара в список покупок
-function addItem(&$items) {
+function addItem(array &$items): void {
     echo "Введите название товара для добавления в список: \n> ";
     $itemName = trim(fgets(STDIN));
-    $items[] = $itemName;
+    if ($itemName !== '') {
+        $items[] = $itemName;
+    }
 }
 
 // Функция для удаления товара из списка покупок
-function deleteItem(&$items) {
+function deleteItem(array &$items): void {
     displayItems($items);
 
     echo 'Введите название товара для удаления из списка:' . PHP_EOL . '> ';
@@ -71,9 +74,9 @@ function deleteItem(&$items) {
 }
 
 // Функция для печати списка покупок
-function printItems($items) {
+function printItems(array $items): void {
     displayItems($items);
-    echo 'Всего ' . count($items) . ' позиций. '. PHP_EOL;
+    echo 'Всего ' . count($items) . ' позиций.' . PHP_EOL;
     echo 'Нажмите enter для продолжения';
     fgets(STDIN);
 }
@@ -82,7 +85,7 @@ function printItems($items) {
 do {
     // Очистка экрана (в данном случае комментирована для UNIX, а для Windows используется 'cls')
     system('clear');
-    //system('cls'); // для Windows
+    // system('cls'); // для Windows
 
     // Отображение списка покупок
     displayItems($items);
@@ -91,7 +94,7 @@ do {
     $operationNumber = getOperation($operations);
 
     // Вывод выбранной операции
-    echo 'Выбрана операция: '  . $operations[$operationNumber] . PHP_EOL;
+    echo 'Выбрана операция: ' . $operations[$operationNumber] . PHP_EOL;
 
     // Обработка выбранной операции
     switch ($operationNumber) {
@@ -111,7 +114,7 @@ do {
     // Разделитель между операциями
     echo "\n ----- \n";
 
-} while ($operationNumber > 0);
+} while ($operationNumber !== OPERATION_EXIT);
 
 // Завершение программы
 echo 'Программа завершена' . PHP_EOL;
